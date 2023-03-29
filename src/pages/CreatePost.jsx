@@ -90,16 +90,15 @@ const CreatePost = () => {
   return (
     <section className="max-w-7xl mx-auto">
       <div>
-        <h1 className="font-extrabold text-[#222] text-[32px]">Create</h1>
+        <h1 className="font-extrabold text-[#222] text-[32px]">Crear</h1>
         <p className="mt-2 text-[#666e75] text-[14px] max-w-[500px]">
-          Create imaginative and visually stunning images Through DALL-E AI and
-          share them with the community
+          Crea imagenes sorprendentes y creativas con DALL-E AI y compartelas con la comunidad
         </p>
       </div>
       <form className="mt-16 max-w-3xl" onSubmit={handleSubmit}>
         <div className="flex flex-col gap-5">
           <FormField
-            labelName="Your name"
+            labelName="Tu nombre"
             type="text"
             name="name"
             placeholder="John Doe"
@@ -111,7 +110,7 @@ const CreatePost = () => {
             labelName="Prompt"
             type="text"
             name="prompt"
-            placeholder="A centered explosion of colorful powder on a black background"
+            placeholder="Una nave espacial con luces alogenas viajando por la orbita de saturno"
             value={form.prompt}
             handleChange={handleChange}
             isSurpriseMe
@@ -148,19 +147,18 @@ const CreatePost = () => {
             onClick={generateImage}
             className="text-white bg-blue-600 font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center"
           >
-            {generatingImg ? "Generating..." : "Generate"}
+            {generatingImg ? "Generando..." : "Generar"}
           </button>
         </div>
         <div className="mt-10">
           <p className="mt-2 text-[#666e75] text-[14px]">
-            You have created the image you want, you can share it with others in
-            the community
+            Creaste la imagen que querías, Puedes compartir tu imagen con la comunidad
           </p>
           <button
             type="submit"
             className="mt-3 text-white bg-[#068441] font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center"
           >
-            {loading ? "Sharing..." : "Share with the community"}
+            {loading ? "Compartiendo..." : "Comparte con la comunidad"}
           </button>
         </div>
       </form>
