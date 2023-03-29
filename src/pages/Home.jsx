@@ -7,16 +7,26 @@ const Home = () => {
   const [loading, setLoading] = useState(false);
   const [allPosts, setAllPosts] = useState([]);
   const [searchText, setSearchText] = useState("");
-  const [searchedResults, setSearchedResults] = useState(null)
-  const [searchTimeout, setSearchTimeout] = useState(null)
+  const [searchedResults, setSearchedResults] = useState(null);
+  const [searchTimeout, setSearchTimeout] = useState(null);
 
   useEffect(() => {
-    setLoading(true);
-    axios
-      .get(import.meta.env.VITE_API + "/api/v1/post")
-      .then((res) => setAllPosts(res.data.reverse()))
-      .catch((err) => console.log(err))
-      .finally(() => setLoading(false));
+    if (localStorage.getItem("community") === null) {
+      setLoading(true);
+      axios
+        .get(import.meta.env.VITE_API + "/api/v1/post")
+        .then((res) => {
+          localStorage.setItem("community", JSON.stringify(res));
+          const result = JSON.parse(
+          localStorage.getItem("community")).data.reverse();
+          setAllPosts(result);
+        })
+        .catch((err) => console.log(err))
+        .finally(() => setLoading(false));
+    } else {
+      const result = JSON.parse(localStorage.getItem("community")).data.reverse();
+      setAllPosts(result);
+    }
   }, []);
 
   const RenderCars = ({ data, title }) => {
@@ -28,17 +38,20 @@ const Home = () => {
     );
   };
 
-  const handleSearchChange = e => {
-    clearTimeout(searchTimeout)
-    setSearchText(e.target.value)
+  const handleSearchChange = (e) => {
+    clearTimeout(searchTimeout);
+    setSearchText(e.target.value);
     setSearchTimeout(
-    setTimeout(() => {
-      const searchResults = allPosts.filter(x => x.name.toLowerCase().includes(searchText.toLowerCase())  
-      || x.prompt.toLowerCase().includes(searchText.toLowerCase()))
-      setSearchedResults(searchResults)
-    }, 500)
-    )
-  }
+      setTimeout(() => {
+        const searchResults = allPosts.filter(
+          (x) =>
+            x.name.toLowerCase().includes(searchText.toLowerCase()) ||
+            x.prompt.toLowerCase().includes(searchText.toLowerCase())
+        );
+        setSearchedResults(searchResults);
+      }, 500)
+    );
+  };
 
   return (
     <section className="max-w-7xl mx-auto">
@@ -47,17 +60,18 @@ const Home = () => {
           Las imagenes de la comunidad
         </h1>
         <p className="mt-2 text-[#666e75] text-[14px] max-w-[500px]">
-          Navega a través de una colección de imagenes imaginativas con la API de DALL-E IA
+          Navega a través de una colección de imagenes imaginativas con la API
+          de DALL-E IA
         </p>
       </div>
       <div className="mt-16">
         <FormField
-        labelName="Buscar Post"
-        type='text'
-        name='text'
-        placeholder='Buscar Post'
-        value={searchText}
-        handleChange={handleSearchChange}
+          labelName="Buscar Post"
+          type="text"
+          name="text"
+          placeholder="Buscar Post"
+          value={searchText}
+          handleChange={handleSearchChange}
         />
       </div>
       <div>
@@ -75,7 +89,10 @@ const Home = () => {
             )}
             <div className="grid lg:gird-cols-4 sm:grid-cols-3 xs:grid-cols-2 grid-cols-1 gap-3 mt-9">
               {searchText ? (
-                <RenderCars data={searchedResults} title="No se encontraron Posts" />
+                <RenderCars
+                  data={searchedResults}
+                  title="No se encontraron Posts"
+                />
               ) : (
                 <RenderCars data={allPosts} title="No se encontraron Posts" />
               )}
