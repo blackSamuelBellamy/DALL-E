@@ -1,6 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { Card, FormField, Loader } from "../components";
+import { motion } from "framer-motion";
 import axios from "axios";
 
 const Home = () => {
@@ -18,19 +19,24 @@ const Home = () => {
         .then((res) => {
           localStorage.setItem("community", JSON.stringify(res));
           const result = JSON.parse(
-          localStorage.getItem("community")).data.reverse();
+            localStorage.getItem("community")
+          ).data.reverse();
           setAllPosts(result);
         })
         .catch((err) => console.log(err))
         .finally(() => setLoading(false));
     } else {
-      const result = JSON.parse(localStorage.getItem("community")).data.reverse();
+      const result = JSON.parse(
+        localStorage.getItem("community")
+      ).data.reverse();
       setAllPosts(result);
     }
   }, []);
 
   const RenderCars = ({ data, title }) => {
-    if (data?.length > 0) return data.map((x) => <Card key={x.id} {...x} />);
+    if (data?.length > 0) return data.map((x) => (   
+      <Card key={x.id} {...x} />    
+    ));
     return (
       <h2 className="mt-5 font-bold text-[#6449ff] text-xl uppercase">
         {title}

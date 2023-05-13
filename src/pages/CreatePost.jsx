@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Preview from "../assets/preview.png";
 import { getRandomPrompt } from "../utils";
-import { FormField, Loader } from "../components";
 import Swal from "sweetalert2";
+import { FormField, Loader } from "../components";
 import axios from "axios";
 
 const CreatePost = () => {
@@ -29,7 +29,8 @@ const CreatePost = () => {
         .then(() => {
           Navigate("/");
         })
-        .catch(() => {
+        .catch( e => {
+          console.log(e)
           Swal.fire({
             icon: "error",
             title: "Hubo un error inesperado",
@@ -67,12 +68,13 @@ const CreatePost = () => {
             photo: `data:image/jpeg;base64,${res.data.photo}`,
           });
         })
-        .catch(() => {
+        .catch( e => {
+          const error = e.response.data
           Swal.fire({
             icon: "error",
-            title: "Hubo un error inesperado",
-            text: "Intenta otra vez",
-            timer: 1800,
+            title: error === "Se ha alcanzado el límite gratuito de pruebas" ? error: 'Hubo un error inesperado',
+            text: `${error? "intenta en otra oportunidad": "intenta en otro momento"}`,
+            timer: 2500,
             showConfirmButton: false,
           });
         })
